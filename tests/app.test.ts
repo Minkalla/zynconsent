@@ -1,12 +1,14 @@
     import request from 'supertest';
     import app from '../src/app'; // Assuming your Express app is exported from src/app.ts
+    import { Server } from 'http'; // Import Server type from http module
 
     describe('ZynConsent API', () => {
-      let server: any; // To hold the server instance for cleanup
+      let server: Server; // Use a more specific type than 'any' for the server instance
 
       // Before all tests, start the server
       beforeAll((done) => {
-        server = app.listen(4000, () => { // Use a different port for testing if 3000 is for dev
+        // Use a different port for testing if 3000 is for dev to prevent conflicts
+        server = app.listen(4001, () => { // Changed to port 4001
           done();
         });
       });
@@ -28,7 +30,8 @@
           timestamp: new Date().toISOString(),
         };
 
-        const res = await request(app)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const res = await (request as any)(app) // Cast request to any to avoid complex type issues with supertest for MVP
           .post('/consent')
           .send(consentEvent);
 
@@ -45,7 +48,8 @@
           timestamp: new Date().toISOString(),
         };
 
-        const res = await request(app)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const res = await (request as any)(app)
           .post('/consent')
           .send(invalidConsentEvent);
 
@@ -55,7 +59,8 @@
 
       it('should retrieve consent events for an existing user (GET /consent/{userId})', async () => {
         // First, record some consent events for a user
-        await request(app)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (request as any)(app)
           .post('/consent')
           .send({
             userId: 'testuser456',
@@ -64,7 +69,8 @@
             timestamp: new Date().toISOString(),
           });
         
-        await request(app)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (request as any)(app)
           .post('/consent')
           .send({
             userId: 'testuser456',
@@ -73,18 +79,20 @@
             timestamp: new Date().toISOString(),
           });
 
-        const res = await request(app)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const res = await (request as any)(app)
           .get('/consent/testuser456');
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.message).toContain('Consent events for user testuser456.');
         expect(res.body.consentEvents).toBeInstanceOf(Array);
-        expect(res.body.consentEvents.length).toBeGreaterThanOrEqual(2); // Might have more if previous tests added
+        expect(res.body.consentEvents.length).toBeGreaterThanOrEqual(2);
         expect(res.body.consentEvents[0].userId).toEqual('testuser456');
       });
 
       it('should return 404 for a user with no consent events (GET /consent/{userId})', async () => {
-        const res = await request(app)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const res = await (request as any)(app)
           .get('/consent/nonexistentuser');
 
         expect(res.statusCode).toEqual(404);
@@ -92,7 +100,9 @@
       });
 
       it('should return 200 for health check (GET /health)', async () => {
-        const res = await request(app).get('/health');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const res = await (request as any)(app)
+          .get('/health');
         expect(res.statusCode).toEqual(200);
         expect(res.body.status).toEqual('ok');
         expect(res.body.service).toEqual('ZynConsent MVP');
