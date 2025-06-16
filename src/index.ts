@@ -1,5 +1,2 @@
-const greet = (name: string): string => {
-  return `Hello, ${name}!`;
-};
-
-console.log(greet('Minkalla'));
+const message: string = "Hello, Minkalla!";
+console.log(message);
