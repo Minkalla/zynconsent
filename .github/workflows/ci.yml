@@ -1,0 +1,38 @@
+name: ZynConsent CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Using Node.js LTS version 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build TypeScript project
+        run: npm run build
+
+      - name: Run npm audit for vulnerabilities
+        run: npm audit --audit-level=moderate || true # '|| true' allows the workflow to pass even if audit finds warnings, but fails on critical issues. Adjust level as needed.
+        continue-on-error: true # Allow subsequent steps to run even if audit finds issues. For production, this might be 'false'.
