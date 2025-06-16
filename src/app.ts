@@ -32,12 +32,9 @@ app.post('/consent', (req: Request<{}, {}, ConsentEvent>, res: Response) => {
   const { userId, consentType, status, timestamp } = req.body;
 
   if (!userId || !consentType || !status || !timestamp) {
-    return res
-      .status(400)
-      .json({
-        error:
-          'Missing required fields: userId, consentType, status, timestamp.',
-      });
+    return res.status(400).json({
+      error: 'Missing required fields: userId, consentType, status, timestamp.',
+    });
   }
   if (!['granted', 'revoked'].includes(status)) {
     return res
