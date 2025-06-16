@@ -1,27 +1,28 @@
 name: CI
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - run: npm install
-      - run: npm test
 
-  lint-format:
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install
-      - run: npm run lint
-      - run: npm run format
+
+      - name: Install dependencies clearly
+        run: npm install
+
+      - name: Run tests clearly
+        run: npm test
+
+      - name: Run lint clearly
+        run: npm run lint
