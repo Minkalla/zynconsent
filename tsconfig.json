@@ -1,29 +1,22 @@
-{
-  "compilerOptions": {
-    /* Base Options */
-    "target": "ES2020",
-    "module": "CommonJS",
-    "lib": ["ES2020", "DOM"],
-    "declaration": true,
-
-    /* Strict Type-Checking Options */
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
+    {
+      "compilerOptions": {
+        "target": "es2016",
+        "module": "commonjs",
+        "rootDir": "./",
+        "outDir": "./dist",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true
+      },
+      "include": [
+        "src/**/*.ts",
+        "tests/**/*.ts" // This line explicitly includes your test files
+      ],
+      "exclude": [
+        "node_modules",
+        "dist"
+      ]
+    }
     
-    /* Module Resolution Options */
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    
-    /* Build Path Options */
-    "outDir": "./dist",
-    "rootDir": "./src",
-
-    /* Advanced Options */
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
-}
