@@ -3,6 +3,7 @@
     import bodyParser from 'body-parser';
     import swaggerUi from 'swagger-ui-express';
     import swaggerJsdoc from 'swagger-jsdoc';
+    import { Server } from 'http'; // Import Server type for explicit typing
 
     const app = express();
     const port = process.env.PORT || 3000;
@@ -10,11 +11,8 @@
     app.use(bodyParser.json());
 
     // --- In-memory Data Storage (for MVP only) ---
-    // Defined explicitly to avoid generic types
-    interface UserConsentData {
-        [userId: string]: ConsentEvent[];
-    }
-    const userConsentStore: UserConsentData = {};
+    // Using Record<string, ConsentEvent[]> to explicitly type the userConsentStore
+    const userConsentStore: Record<string, ConsentEvent[]> = {};
 
     /**
      * @typedef {object} ConsentEvent
@@ -63,7 +61,7 @@
         });
     });
 
-    app.get('/consent/:userId', (req: Request, res: Response) => {
+    app.get('/consent/:userId', (req: Request<{ userId: string }>, res: Response) => {
         const { userId } = req.params;
         const userEvents = userConsentStore[userId];
 
@@ -76,6 +74,7 @@
             consentEvents: userEvents.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()),
         });
     });
+
 
     // --- Swagger/OpenAPI Setup (Task 1.6) ---
     const swaggerOptions = {
