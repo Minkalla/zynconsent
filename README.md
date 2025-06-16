@@ -114,4 +114,4 @@ This project is licensed under the Apache 2.0 License. See the LICENSE file for 
 Security
 For information on reporting security vulnerabilities, please refer to our SECURITY.md policy.
 
-Part of the Minkalla open-source ecosystem.
+Part of the Minkalla open-source ecosystem. 
