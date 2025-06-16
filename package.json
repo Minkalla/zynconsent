@@ -11,7 +11,7 @@
     "start": "node dist/app.js",
     "build": "tsc",
     "dev": "nodemon --exec ts-node src/app.ts",
-    "test": "jest",
+    "test": "jest --forceExit",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"{src,tests}/**/*.ts\"",
     "prepublishOnly": "npm run build",
