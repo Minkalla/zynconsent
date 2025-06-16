@@ -11,18 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js v20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm' # Add caching for faster installs
 
-      - name: Install dependencies clearly
-        run: npm install
+      - name: Install dependencies securely
+        run: npm ci
 
-      - name: Run tests clearly
-        run: npm test
-
-      - name: Run lint clearly
+      - name: Run linter
         run: npm run lint
+
+      - name: Run build to verify types
+        run: npm run build
+
+      - name: Run tests
+        run: npm run test
