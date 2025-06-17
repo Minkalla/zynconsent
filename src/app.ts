@@ -270,3 +270,52 @@ const swaggerOptions = {
                         example:
                           'No consent events found for user: non-existent-user.',
                       },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      '/health': {
+        get: {
+          tags: ['Health'],
+          summary: 'Health check endpoint',
+          description: 'Returns the status of the ZynConsent service.',
+          responses: {
+            '200': {
+              description: 'Service is healthy.',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      status: { type: 'string', example: 'ok' },
+                      message: {
+                        // Corrected: changed 'service' to 'message' to match test expectations
+                        type: 'string',
+                        example: 'ZynConsent API is running!',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  apis: [],
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+app.listen(port, () => {
+  console.log(`ZynConsent MVP API running on http://localhost:${port}`);
+  console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
+});
+
+export default app;
