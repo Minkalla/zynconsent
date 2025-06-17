@@ -1,0 +1,41 @@
+{
+  "name": "ZynConsent Codespace",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20",
+      "nodeGypDependencies": true
+    }
+  },
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "eslint.probe": [
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact"
+        ],
+        "eslint.options": {
+          "cache": true
+        }
+      }
+    }
+  },
+  "portsAttributes": {
+    "3000": {
+      "label": "ZynConsent API",
+      "onAutoForward": "openBrowser",
+      "onForward": "openBrowser",
+      "requireLocalPort": true,
+      "urlFormat": "http://localhost:3000/api-docs"
+    }
+  },
+  "forwardPorts": [3000]
+}
