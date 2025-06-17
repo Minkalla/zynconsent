@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
-// import { Server } from 'http'; // Import Server type for explicit typing - commented out for linting
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -27,6 +26,11 @@ export interface ConsentEvent {
   status: 'granted' | 'revoked';
   timestamp: string;
 }
+
+// NEW: Redirect from root path to Swagger UI for improved DX
+app.get('/', (req: Request, res: Response) => {
+  res.redirect('/api-docs');
+});
 
 app.post('/consent', (req: Request<{}, {}, ConsentEvent>, res: Response) => {
   const { userId, consentType, status, timestamp } = req.body;
@@ -266,52 +270,3 @@ const swaggerOptions = {
                         example:
                           'No consent events found for user: non-existent-user.',
                       },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      '/health': {
-        get: {
-          tags: ['Health'],
-          summary: 'Health check endpoint',
-          description: 'Returns the status of the ZynConsent service.',
-          responses: {
-            '200': {
-              description: 'Service is healthy.',
-              content: {
-                'application/json': {
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      status: { type: 'string', example: 'ok' },
-                      service: { type: 'string', example: 'ZynConsent MVP' },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  apis: [],
-};
-
-const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'ok', service: 'ZynConsent MVP' });
-});
-
-app.listen(port, () => {
-  console.log(`ZynConsent MVP API running on http://localhost:${port}`);
-  console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
-});
-
-export default app;
